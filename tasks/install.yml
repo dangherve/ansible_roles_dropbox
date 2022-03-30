@@ -1,0 +1,29 @@
+
+
+- name: dropbox install {{ user.user }}
+  shell: "echo 'y' |dropbox start -i " 
+  args:
+    chdir: ~/
+    creates: "{{ default_dropbox_directory }}" 
+  become: yes
+  become_user: "{{ user.user }}"
+
+
+#TO DO need to be finish |mail -s {{ user.account }} dangherve@gmail.com
+- name: dropbox setup {{ user.user }}
+  shell: "dropbox start ; dropbox status"
+  register: output
+  args:
+    chdir: ~/
+    creates: "{{ default_dropbox_directory }}" 
+  become: yes
+  become_user: "{{ user.user }}"
+
+- name: promt link
+  debug: 
+    msg: "{{ user.user }}:\n{{output.stdout}}"
+  when: output.changed
+
+- name: mail
+  shell: "echo {{ output.stdout }} | mail -s dropbox  {{ user.user }} dangherve@gmail.com"
+  when: output.changed

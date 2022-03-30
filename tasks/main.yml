@@ -1,0 +1,41 @@
+
+- name: install | dependencies
+  apt:
+    name: "{{ dropbox_dependencies }}"
+    state: "{{ apt_install_state | default('latest') }}"
+    update_cache: true
+    cache_valid_time: "{{ apt_update_cache_valid_time | default(3600) }}"
+
+- name: create (download) directory
+  file:
+    path: "{{ dropbox_downloads_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: 0755
+
+- name: download
+  command: 
+    curl -sSL
+    https://www.dropbox.com/download?dl=packages/{{ ansible_distribution | lower }}/dropbox_{{ dropbox_version }}_{{ dropbox_machine_map[ansible_machine] }}.deb
+    -o {{ dropbox_downloads_path }}/dropbox_{{ dropbox_version }}_{{ dropbox_machine_map[ansible_machine] }}.deb
+  args:
+    creates: "{{ dropbox_downloads_path }}/dropbox_{{ dropbox_version }}_{{ dropbox_machine_map[ansible_machine] }}.deb"
+
+- name: install deb file
+  apt:
+    deb: "{{ dropbox_downloads_path }}/dropbox_{{ dropbox_version }}_{{ dropbox_machine_map[ansible_machine] }}.deb"
+
+# install for user
+- include_tasks: install.yml
+  with_items: "{{ dropbox_user }}"
+  loop_control:
+    loop_var: user
+ 
+
+
+
+
+
+
+
