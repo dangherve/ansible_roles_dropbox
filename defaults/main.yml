@@ -1,8 +1,8 @@
 # defaults file for dropbox
 ---
 
-#TO DO get latest version automaticly 
-dropbox_version: 2022.12.05
+#TO DO get latest version automaticly
+dropbox_version: 2023.09.06
 
 dropbox_dependencies:
   - curl
@@ -18,7 +18,7 @@ dropbox_machine_map:
   x86_64: amd64
   amd64: amd64
 
-dropbox_user: 
+dropbox_user:
     - dangherve
 
 
