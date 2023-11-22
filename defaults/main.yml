@@ -18,8 +18,8 @@ dropbox_machine_map:
   x86_64: amd64
   amd64: amd64
 
-dropbox_user:
-    - dangherve
-
+dropbox_user: []
+#    - user: dangherve
+#      account: dangherve@gmail.com
 
 default_dropbox_directory: Dropbox
