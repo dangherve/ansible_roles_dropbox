@@ -30,6 +30,7 @@
 - name: install deb file
   apt:
     deb: "{{ dropbox_downloads_path }}/dropbox_{{ dropbox_version }}_{{ dropbox_machine_map[ansible_machine] }}.deb"
+  when: dropbox_setup_broken is not defined
 
 # install for user
 - include_tasks: install.yml

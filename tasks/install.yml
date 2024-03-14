@@ -1,29 +1,47 @@
 
 
 - name: dropbox install {{ user.user }}
-  shell: "echo 'y' |dropbox start -i " 
+  shell: "echo 'y' |dropbox start -i "
   args:
     chdir: ~/
-    creates: "{{ default_dropbox_directory }}" 
+    creates: "{{ default_dropbox_directory }}"
   become: yes
   become_user: "{{ user.user }}"
 
 
-#TO DO need to be finish |mail -s {{ user.account }} dangherve@gmail.com
 - name: dropbox setup {{ user.user }}
   shell: "dropbox start ; dropbox status"
   register: output
   args:
     chdir: ~/
-    creates: "{{ default_dropbox_directory }}" 
+    creates: "{{ default_dropbox_directory }}"
   become: yes
   become_user: "{{ user.user }}"
 
 - name: promt link
-  debug: 
+  debug:
     msg: "{{ user.user }}:\n{{output.stdout}}"
   when: output.changed
 
 - name: mail
   shell: "echo {{ output.stdout }} | mail -s dropbox  {{ user.user }} dangherve@gmail.com"
   when: output.changed
+
+- name: Generate dropox services {{ user.user }}
+  template:
+    src: templates/dropbox.service.j2
+    dest: /lib/systemd/system/dropbox_{{ user.user }}.service
+    owner: root
+    group: root
+    mode: '0644'
+  notify:
+    - reload systemctl
+
+- meta: flush_handlers
+
+- name: start dropbox service {{ user.user }}
+  service:
+    name: dropbox_{{ user.user }}.service
+    state: started
+    enabled: yes
+
