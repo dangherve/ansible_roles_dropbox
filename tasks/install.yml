@@ -10,7 +10,7 @@
 
 
 - name: dropbox setup {{ user.user }}
-  shell: "dropbox start ; dropbox status"
+  shell: "dropbox start"
   register: output
   args:
     chdir: ~/
@@ -20,7 +20,7 @@
 
 - name: promt link
   debug:
-    msg: "{{ user.user }}:\n{{output.stdout}}"
+    msg: "{{ user.user }}:\n{{ output.stdout }}"
   when: output.changed
 
 - name: mail
