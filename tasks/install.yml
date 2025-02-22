@@ -27,6 +27,10 @@
   shell: "echo {{ output.stdout }} | mail -s dropbox  {{ user.user }} dangherve@gmail.com"
   when: output.changed
 
+#- name: Pause
+#  ansible.builtin.pause:
+#    prompt: "Enter a secret"
+
 - name: Generate dropox services {{ user.user }}
   template:
     src: templates/dropbox.service.j2
