@@ -1,15 +1,6 @@
 # defaults file for dropbox
 ---
 
-#TO DO get latest version automaticly
-dropbox_version: 2023.09.06
-
-dropbox_dependencies:
-  - curl
-  - python3-gpg
-  - mailutils
-
-
 dropbox_downloads_path: /root/
 
 dropbox_machine_map:

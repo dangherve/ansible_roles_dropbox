@@ -1,0 +1,6 @@
+
+dropbox_dependencies:
+  - curl
+  - python3-gpg
+  - mailutils
+  - ayatana-indicator-application
