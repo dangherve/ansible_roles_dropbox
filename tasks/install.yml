@@ -8,7 +8,6 @@
   become: yes
   become_user: "{{ user.user }}"
 
-
 - name: dropbox setup {{ user.user }}
   shell: "dropbox start"
   register: output
@@ -17,6 +16,16 @@
     creates: "{{ default_dropbox_directory }}"
   become: yes
   become_user: "{{ user.user }}"
+
+- name: fix permissions
+  file:
+    path: "{{ item }}"
+    mode: 0775
+  become: yes
+  become_user: "{{ user.user }}"
+  with_items:
+    - ~/Dropbox
+    - ~/
 
 - name: promt link
   debug:
@@ -27,9 +36,10 @@
   shell: "echo {{ output.stdout }} | mail -s dropbox  {{ user.user }} dangherve@gmail.com"
   when: output.changed
 
-#- name: Pause
-#  ansible.builtin.pause:
-#    prompt: "Enter a secret"
+- name: Pause
+  ansible.builtin.pause:
+    prompt: "validate dropbox"
+    minutes : 3
 
 - name: Generate dropox services {{ user.user }}
   template:
