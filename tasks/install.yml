@@ -17,15 +17,6 @@
   become: yes
   become_user: "{{ user.user }}"
 
-- name: fix permissions
-  file:
-    path: "{{ item }}"
-    mode: 0775
-  become: yes
-  become_user: "{{ user.user }}"
-  with_items:
-    - ~/Dropbox
-    - ~/
 
 - name: promt link
   debug:
@@ -37,9 +28,20 @@
   when: output.changed
 
 - name: Pause
-  ansible.builtin.pause:
-    prompt: "validate dropbox"
+  pause:
+    prompt: "validate dropbox & wait for main folder creation"
     minutes : 3
+  when: output.changed
+
+- name: fix permissions
+  file:
+    path: "{{ item }}"
+    mode: 0775
+  become: yes
+  become_user: "{{ user.user }}"
+  with_items:
+    - ~/Dropbox
+    - ~/
 
 - name: Generate dropox services {{ user.user }}
   template:
